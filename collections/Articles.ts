@@ -275,17 +275,9 @@ export const Articles: CollectionConfig = {
               admin: {
                 description: 'Manually selected related content',
               },
-              filterOptions: ({ data, id }) => {
-                // Build conditions for same tenant and exclude self
-                if (data?.tenant && id) {
-                  return {
-                    tenant: { equals: data.tenant },
-                    id: { not_equals: id },
-                  }
-                }
-                if (data?.tenant) {
-                  return { tenant: { equals: data.tenant } }
-                }
+              filterOptions: ({ id }) => {
+                // Exclude self from related articles selection
+                // Tenant filtering is handled automatically by the multi-tenant plugin
                 if (id) {
                   return { id: { not_equals: id } }
                 }
