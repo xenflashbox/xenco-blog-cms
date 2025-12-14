@@ -199,12 +199,6 @@ export default buildConfig({
     'https://fiberinsider.com',
   ].filter(Boolean),
 
-  // Rate limiting
-  rateLimit: {
-    trustProxy: true,
-    max: 500,
-  },
-
   // GraphQL disabled (using REST API)
   graphQL: {
     disable: true,
