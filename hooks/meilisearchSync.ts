@@ -1,5 +1,5 @@
 import { MeiliSearch } from 'meilisearch'
-import type { PayloadRequest } from 'payload'
+import type { PayloadRequest, Where } from 'payload'
 
 // Initialize MeiliSearch client
 const getMeiliClient = () => {
@@ -227,13 +227,9 @@ export const reindexAllArticles = async (
 ): Promise<{ indexed: number; errors: number }> => {
   const results = { indexed: 0, errors: 0 }
   
-  const query: Record<string, unknown> = {
-    status: { equals: 'published' },
-  }
-  
-  if (tenantId) {
-    query.tenant = { equals: tenantId }
-  }
+  const query: Where = tenantId 
+    ? { and: [{ status: { equals: 'published' } }, { tenant: { equals: tenantId } }] }
+    : { status: { equals: 'published' } }
   
   const articles = await payload.find({
     collection: 'articles',

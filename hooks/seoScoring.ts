@@ -1,4 +1,4 @@
-import type { PayloadRequest } from 'payload'
+import type { PayloadRequest, Where } from 'payload'
 
 interface SEOScoreRequest {
   keyword: string
@@ -247,13 +247,9 @@ export const batchScoreArticles = async (
     results: [],
   }
   
-  const query: Record<string, unknown> = {
-    focusKeyword: { exists: true },
-  }
-  
-  if (tenantId) {
-    query.tenant = { equals: tenantId }
-  }
+  const query: Where = tenantId 
+    ? { and: [{ focusKeyword: { exists: true } }, { tenant: { equals: tenantId } }] }
+    : { focusKeyword: { exists: true } }
   
   const articles = await payload.find({
     collection: 'articles',
