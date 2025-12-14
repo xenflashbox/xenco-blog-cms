@@ -276,14 +276,20 @@ export const Articles: CollectionConfig = {
                 description: 'Manually selected related content',
               },
               filterOptions: ({ data, id }) => {
-                const conditions: Record<string, unknown> = {}
+                // Build conditions for same tenant and exclude self
+                if (data?.tenant && id) {
+                  return {
+                    tenant: { equals: data.tenant },
+                    id: { not_equals: id },
+                  }
+                }
                 if (data?.tenant) {
-                  conditions.tenant = { equals: data.tenant }
+                  return { tenant: { equals: data.tenant } }
                 }
                 if (id) {
-                  conditions.id = { not_equals: id }
+                  return { id: { not_equals: id } }
                 }
-                return Object.keys(conditions).length > 0 ? conditions : true
+                return true
               },
               maxRows: 5,
             },
