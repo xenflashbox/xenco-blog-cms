@@ -16,13 +16,23 @@ export const Users: CollectionConfig = {
     defaultColumns: ['name', 'email', 'role', 'updatedAt'],
   },
   access: {
-    // Super-admins can do everything
-    // Regular admins can read other users in their tenant
-    create: ({ req }) => req.user?.role === 'super-admin',
+    // Allow first user creation, then only super-admins
+    create: async ({ req }) => {
+      // Allow if no users exist (first user setup)
+      if (!req.user) {
+        const existingUsers = await req.payload.find({
+          collection: 'users',
+          limit: 1,
+        })
+        if (existingUsers.totalDocs === 0) {
+          return true
+        }
+      }
+      return req.user?.role === 'super-admin'
+    },
     read: ({ req }) => {
       if (!req.user) return false
       if (req.user.role === 'super-admin') return true
-      // Users can read themselves and users in their tenants
       const tenantIds = req.user.tenants?.map((t: { tenant: { id: string } | string }) => 
         typeof t.tenant === 'object' ? t.tenant.id : t.tenant
       ) || []
@@ -37,7 +47,6 @@ export const Users: CollectionConfig = {
     update: ({ req }) => {
       if (!req.user) return false
       if (req.user.role === 'super-admin') return true
-      // Users can update themselves
       return { id: { equals: req.user.id } }
     },
     delete: ({ req }) => req.user?.role === 'super-admin',
