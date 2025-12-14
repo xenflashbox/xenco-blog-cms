@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Where } from 'payload'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -23,18 +23,16 @@ export const Users: CollectionConfig = {
       if (!req.user) return false
       if (req.user.role === 'super-admin') return true
       // Users can read themselves and users in their tenants
-      return {
+      const tenantIds = req.user.tenants?.map((t: { tenant: { id: string } | string }) => 
+        typeof t.tenant === 'object' ? t.tenant.id : t.tenant
+      ) || []
+      const query: Where = {
         or: [
           { id: { equals: req.user.id } },
-          {
-            'tenants.tenant': {
-              in: req.user.tenants?.map((t: { tenant: { id: string } }) => 
-                typeof t.tenant === 'object' ? t.tenant.id : t.tenant
-              ) || [],
-            },
-          },
+          { 'tenants.tenant': { in: tenantIds } },
         ],
       }
+      return query
     },
     update: ({ req }) => {
       if (!req.user) return false
