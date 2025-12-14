@@ -250,7 +250,7 @@ export const Articles: CollectionConfig = {
                 if (data?.tenant) {
                   return { tenant: { equals: data.tenant } }
                 }
-                return {}
+                return true
               },
             },
             {
@@ -263,7 +263,7 @@ export const Articles: CollectionConfig = {
                 if (data?.tenant) {
                   return { tenant: { equals: data.tenant } }
                 }
-                return {}
+                return true
               },
             },
             {
@@ -283,7 +283,7 @@ export const Articles: CollectionConfig = {
                 if (id) {
                   conditions.id = { not_equals: id }
                 }
-                return conditions
+                return Object.keys(conditions).length > 0 ? conditions : true
               },
               maxRows: 5,
             },
