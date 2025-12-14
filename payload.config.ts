@@ -143,17 +143,7 @@ export default buildConfig({
         tags: {},
         media: {
           // Media can be shared across tenants if needed
-          isGlobal: false,
-        },
-      },
-      tenantsCollectionSlug: 'tenants',
-      useAsTitle: 'name',
-      // Tenant field configuration
-      tenantField: {
-        name: 'tenant',
-        access: {
-          // Only super-admins can change tenant assignment
-          update: ({ req }) => req.user?.role === 'super-admin',
+          useTenantAccess: false,
         },
       },
     }),
