@@ -95,8 +95,6 @@ export default buildConfig({
     },
     meta: {
       titleSuffix: ' | Xenco Blog CMS',
-      favicon: '/favicon.ico',
-      ogImage: '/og-image.png',
     },
   },
 
