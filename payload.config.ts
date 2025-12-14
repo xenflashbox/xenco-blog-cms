@@ -86,6 +86,18 @@ const richTextEditor = lexicalEditor({
   ],
 })
 
+// Define allowed origins for CORS and CSRF
+const allowedOrigins = [
+  'https://cms.xencolabs.com',
+  'https://resumecoach.me',
+  'https://blogcraft.app',
+  'https://imagecrafter.app',
+  'https://fightclubtech.com',
+  'https://winecountrycorner.com',
+  'https://promptmarketer.app',
+  'https://fiberinsider.com',
+]
+
 export default buildConfig({
   // Admin panel configuration
   admin: {
@@ -136,13 +148,11 @@ export default buildConfig({
     // Multi-Tenant Plugin
     multiTenantPlugin({
       collections: {
-        // Apply tenant isolation to these collections
         articles: {},
         categories: {},
         authors: {},
         tags: {},
         media: {
-          // Media can be shared across tenants if needed
           useTenantAccess: false,
         },
       },
@@ -172,7 +182,6 @@ export default buildConfig({
         media: {
           prefix: 'media',
           generateFileURL: ({ filename, prefix }) => {
-            // Use custom domain if configured, otherwise use R2 public URL
             const baseUrl = process.env.R2_PUBLIC_URL || `https://${process.env.R2_BUCKET}.${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`
             return `${baseUrl}/${prefix}/${filename}`
           },
@@ -191,18 +200,11 @@ export default buildConfig({
     }),
   ],
 
-  // CORS configuration for API access
-  cors: [
-    process.env.PAYLOAD_PUBLIC_SERVER_URL || '',
-    'https://resumecoach.me',
-    'https://blogcraft.app',
-    'https://imagecrafter.app',
-    'https://fightclubtech.com',
-    'https://winecountrycorner.com',
-    'https://promptmarketer.app',
-    'https://cms.xencolabs.com',
-    'https://fiberinsider.com',
-  ].filter(Boolean),
+  // CORS - allow these origins to make API requests
+  cors: allowedOrigins,
+
+  // CSRF protection - origins allowed to submit forms/mutations
+  csrf: allowedOrigins,
 
   // GraphQL disabled (using REST API)
   graphQL: {
