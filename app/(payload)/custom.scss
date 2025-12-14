@@ -1,0 +1,79 @@
+/* Custom Payload Admin Styles */
+/* Add any admin panel customizations here */
+
+:root {
+  /* Custom theme colors - can be overridden per tenant */
+  --theme-elevation-0: #ffffff;
+  --theme-elevation-50: #f9fafb;
+  --theme-elevation-100: #f3f4f6;
+  --theme-elevation-150: #e5e7eb;
+  --theme-elevation-200: #d1d5db;
+  --theme-elevation-250: #9ca3af;
+  --theme-elevation-300: #6b7280;
+  --theme-elevation-350: #4b5563;
+  --theme-elevation-400: #374151;
+  --theme-elevation-450: #1f2937;
+  --theme-elevation-500: #111827;
+  --theme-elevation-550: #0d1117;
+  --theme-elevation-600: #0a0d12;
+  --theme-elevation-650: #070a0d;
+  --theme-elevation-700: #050709;
+  --theme-elevation-750: #030405;
+  --theme-elevation-800: #020304;
+  --theme-elevation-850: #010203;
+  --theme-elevation-900: #010102;
+  --theme-elevation-950: #000101;
+  --theme-elevation-1000: #000000;
+}
+
+/* Custom admin panel header */
+.payload-admin-bar {
+  /* Add any header customizations */
+}
+
+/* Better article list display */
+.collection-list--articles {
+  .table {
+    .cell--title {
+      font-weight: 600;
+    }
+    
+    .cell--status {
+      .pill {
+        &[data-status="published"] {
+          background-color: #10b981;
+        }
+        &[data-status="draft"] {
+          background-color: #6b7280;
+        }
+        &[data-status="review"] {
+          background-color: #f59e0b;
+        }
+        &[data-status="scheduled"] {
+          background-color: #3b82f6;
+        }
+        &[data-status="archived"] {
+          background-color: #ef4444;
+        }
+      }
+    }
+  }
+}
+
+/* SEO Score indicator */
+.field--seoScore {
+  .field-type {
+    font-size: 1.5rem;
+    font-weight: bold;
+    
+    &[data-score-range="high"] {
+      color: #10b981;
+    }
+    &[data-score-range="medium"] {
+      color: #f59e0b;
+    }
+    &[data-score-range="low"] {
+      color: #ef4444;
+    }
+  }
+}
