@@ -3,6 +3,7 @@ import type { ServerFunctionClient } from 'payload'
 import config from '@payload-config'
 import '@payloadcms/next/css'
 import { RootLayout } from '@payloadcms/next/layouts'
+import { handleServerFunctions } from '@payloadcms/next/utilities'
 import React from 'react'
 
 import { importMap } from './admin/importMap.js'
@@ -14,11 +15,10 @@ type Args = {
 
 const serverFunction: ServerFunctionClient = async function (args) {
   'use server'
-  const { handleServerFunctions, importMap: importMapArg } = await import('@payloadcms/next/utilities')
   return handleServerFunctions({
     ...args,
     config,
-    importMap: importMapArg,
+    importMap,
   })
 }
 
