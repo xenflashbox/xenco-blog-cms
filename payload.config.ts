@@ -195,7 +195,12 @@ export default buildConfig({
   cors: [
     process.env.PAYLOAD_PUBLIC_SERVER_URL || '',
     'https://resumecoach.me',
-    'https://blogcraft.xencolabs.com',
+    'https://blogcraft.app',
+    'https://imagecrafter.app',
+    'https://fightclubtech.com',
+    'https://winecountrycorner.com',
+    'https://promptmarketer.app',
+    'https://cms.xencolabs.com',
     'https://fiberinsider.com',
   ].filter(Boolean),
 
