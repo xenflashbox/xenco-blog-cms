@@ -74,7 +74,7 @@ export const Categories: CollectionConfig = {
         if (id) {
           return { id: { not_equals: id } }
         }
-        return {}
+        return true
       },
     },
     {

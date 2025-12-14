@@ -234,7 +234,7 @@ export const Articles: CollectionConfig = {
                 if (data?.tenant) {
                   return { tenant: { equals: data.tenant } }
                 }
-                return {}
+                return true
               },
             },
             {
