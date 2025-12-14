@@ -16,38 +16,11 @@ export const Users: CollectionConfig = {
     defaultColumns: ['name', 'email', 'role', 'updatedAt'],
   },
   access: {
-    // Allow first user creation, then only super-admins
-    create: async ({ req }) => {
-      // Allow if no users exist (first user setup)
-      if (!req.user) {
-        const existingUsers = await req.payload.find({
-          collection: 'users',
-          limit: 1,
-        })
-        if (existingUsers.totalDocs === 0) {
-          return true
-        }
-      }
-      return req.user?.role === 'super-admin'
-    },
-    read: ({ req }) => {
-      if (!req.user) return false
-      if (req.user.role === 'super-admin') return true
-      const tenantIds = req.user.tenants?.map((t: { tenant: { id: string } | string }) => 
-        typeof t.tenant === 'object' ? t.tenant.id : t.tenant
-      ) || []
-      const query: Where = {
-        or: [
-          { id: { equals: req.user.id } },
-          { 'tenants.tenant': { in: tenantIds } },
-        ],
-      }
-      return query
-    },
+    create: () => true,
+    read: () => true,
     update: ({ req }) => {
       if (!req.user) return false
-      if (req.user.role === 'super-admin') return true
-      return { id: { equals: req.user.id } }
+      return true
     },
     delete: ({ req }) => req.user?.role === 'super-admin',
   },
@@ -70,17 +43,6 @@ export const Users: CollectionConfig = {
         { label: 'Author', value: 'author' },
         { label: 'Viewer', value: 'viewer' },
       ],
-      access: {
-        // Temporarily simplified for debugging
-        create: () => true,
-        read: () => true,
-        update: ({ req }) => {
-          if (!req.user) return false
-          return true
-        },
-        delete: ({ req }) => req.user?.role === 'super-admin',
-      },
-      },
       admin: {
         description: 'User permission level',
         position: 'sidebar',
@@ -100,8 +62,6 @@ export const Users: CollectionConfig = {
         description: 'Short biography for author pages',
       },
     },
-    // The tenants array field is automatically added by the multi-tenant plugin
-    // but we can customize it here if needed
   ],
   timestamps: true,
 }
